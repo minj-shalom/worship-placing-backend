@@ -1,9 +1,5 @@
-import { Place, WorshipPlace, WorshipPlaceList } from "../commons/place";
-import {
-  createdAt,
-  InMemoryMap,
-  DisplayPlaceId,
-} from "../commons/in-memory-map";
+import { Place, WorshipPlace } from "../commons/place";
+import { InMemoryMap, DisplayPlaceId } from "../commons/in-memory-map";
 import { v4 } from "uuid";
 import moment from "moment";
 
@@ -22,14 +18,7 @@ export class PlacesService {
         : 1
     );
 
-    const worshipPlaceList: WorshipPlaceList = {
-      count,
-      worshipPlaces,
-      createdAt,
-      updatedAt,
-    };
-
-    return worshipPlaceList;
+    return worshipPlaces;
   }
 
   getWorshipPlace(id: string) {

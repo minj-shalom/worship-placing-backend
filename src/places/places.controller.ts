@@ -10,19 +10,26 @@ export class PlacesController {
 
       if (worshipPlaceList) {
         return res.status(200).json({
-          worshipPlaceList: worshipPlaceList,
-          message: "Success!",
+          data: {
+            count: worshipPlaceList.length,
+            worshipPlaces: worshipPlaceList,
+          },
+          status: "success",
         });
       } else {
         return res.status(500).json({
           message: "예배 목록 조회에 실패했습니다.",
+          status: "error",
         });
       }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
       }
-      return res.status(500).json("서버 에러가 발생했습니다.");
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
     }
   }
 
@@ -33,6 +40,7 @@ export class PlacesController {
       if (typeof id !== "string" || id === "") {
         return res.status(400).json({
           message: "유효하지 않은 아이디입니다.",
+          status: "failed",
         });
       }
 
@@ -40,19 +48,23 @@ export class PlacesController {
 
       if (worshipPlace) {
         return res.status(200).json({
-          worshipPlace: worshipPlace,
-          message: "Success!",
+          data: worshipPlace,
+          status: "success",
         });
       } else {
         return res.status(200).json({
           message: "No Data!",
+          status: "success",
         });
       }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
       }
-      return res.status(500).json("서버 에러가 발생했습니다.");
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
     }
   }
 
@@ -63,30 +75,35 @@ export class PlacesController {
       if (places.length === 0) {
         return res.status(400).json({
           message: "유효하지 않은 자리 목록입니다.",
+          status: "failed",
         });
       }
 
       if (typeof row !== "string" || row === "") {
         return res.status(400).json({
           message: "유효하지 않은 행입니다.",
+          status: "failed",
         });
       }
 
       if (typeof col !== "number" || col === 0) {
         return res.status(400).json({
           message: "유효하지 않은 열입니다.",
+          status: "failed",
         });
       }
 
       if (typeof date !== "string" || date === "") {
         return res.status(400).json({
           message: "유효하지 않은 예배일입니다.",
+          status: "failed",
         });
       }
 
       if (typeof title !== "string" || title === "") {
         return res.status(400).json({
           message: "유효하지 않은 예배 제목입니다.",
+          status: "failed",
         });
       }
 
@@ -101,20 +118,23 @@ export class PlacesController {
 
       if (newWorshipPlace) {
         return res.status(200).json({
-          worshipPlace: newWorshipPlace,
-          createdAt: newWorshipPlace.createdAt,
-          message: "Success!",
+          data: newWorshipPlace,
+          status: "success",
         });
       } else {
         return res.status(500).json({
           message: "예배 자리 저장에 실패했습니다.",
+          status: "error",
         });
       }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
       }
-      return res.status(500).json("서버 에러가 발생했습니다.");
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
     }
   }
 
@@ -125,17 +145,22 @@ export class PlacesController {
       if (result) {
         return res.status(200).json({
           message: "Success!",
+          status: "success",
         });
       } else {
         return res.status(500).json({
           message: "예배 자리 전체 삭제에 실패했습니다.",
+          status: "error",
         });
       }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
       }
-      return res.status(500).json("서버 에러가 발생했습니다.");
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
     }
   }
 
@@ -146,6 +171,7 @@ export class PlacesController {
       if (typeof id !== "string" || id === "") {
         return res.status(400).json({
           message: "유효하지 않은 아이디입니다.",
+          status: "failed",
         });
       }
 
@@ -153,19 +179,23 @@ export class PlacesController {
 
       if (result) {
         return res.status(200).json({
-          id,
-          message: "Success!",
+          data: { id },
+          status: "success",
         });
       } else {
         return res.status(500).json({
           message: "예배 자리 삭제에 실패했습니다.",
+          status: "error",
         });
       }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
       }
-      return res.status(500).json("서버 에러가 발생했습니다.");
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
     }
   }
 
@@ -176,6 +206,7 @@ export class PlacesController {
       if (typeof id !== "string" || id === "") {
         return res.status(400).json({
           message: "유효하지 않은 아이디입니다.",
+          status: "failed",
         });
       }
 
@@ -183,20 +214,23 @@ export class PlacesController {
 
       if (result) {
         return res.status(200).json({
-          result: result,
-          message: "Success!",
+          data: { result: result },
+          status: "success",
         });
       } else {
         return res.status(200).json({
-          result: result,
+          data: { result: result },
           message: "해당 아이디가 존재하지 않습니다.",
+          status: "success",
         });
       }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
       }
-      return res.status(500).json("서버 에러가 발생했습니다.");
+      return res
+        .status(500)
+        .json({ message: "서버 에러가 발생했습니다.", status: "error" });
     }
   }
 
@@ -207,30 +241,35 @@ export class PlacesController {
       if (typeof id !== "string" || id === "") {
         return res.status(400).json({
           message: "유효하지 않은 아이디입니다.",
+          status: "failed",
         });
       }
 
       if (typeof row !== "string" || row === "") {
         return res.status(400).json({
           message: "유효하지 않은 행입니다.",
+          status: "failed",
         });
       }
 
       if (typeof col !== "number" || col === 0) {
         return res.status(400).json({
           message: "유효하지 않은 열입니다.",
+          status: "failed",
         });
       }
 
       if (typeof name !== "string" || name === "") {
         return res.status(400).json({
           message: "유효하지 않은 이름입니다.",
+          status: "failed",
         });
       }
 
       if (typeof cell !== "string" || cell === "") {
         return res.status(400).json({
           message: "유효하지 않은 셀입니다.",
+          status: "failed",
         });
       }
 
@@ -238,20 +277,23 @@ export class PlacesController {
 
       if (newPlace) {
         return res.status(200).json({
-          place: newPlace,
-          updatedAt: newPlace.updatedAt,
-          message: "Success!",
+          data: newPlace,
+          status: "success",
         });
       } else {
         return res.status(500).json({
           message: "자리 저장에 실패했습니다.",
+          status: "error",
         });
       }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
       }
-      return res.status(500).json("서버 에러가 발생했습니다.");
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
     }
   }
 
@@ -262,18 +304,21 @@ export class PlacesController {
       if (typeof id !== "string" || id === "") {
         return res.status(400).json({
           message: "유효하지 않은 아이디입니다.",
+          status: "failed",
         });
       }
 
       if (typeof row !== "string" || row === "") {
         return res.status(400).json({
           message: "유효하지 않은 행입니다.",
+          status: "failed",
         });
       }
 
       if (typeof col !== "number" || col === 0) {
         return res.status(400).json({
           message: "유효하지 않은 열입니다.",
+          status: "failed",
         });
       }
 
@@ -281,20 +326,23 @@ export class PlacesController {
 
       if (newPlace) {
         return res.status(200).json({
-          place: newPlace,
-          updatedAt: newPlace.updatedAt,
-          message: "Success!",
+          data: newPlace,
+          status: "success",
         });
       } else {
         return res.status(500).json({
           message: "자리 삭제에 실패했습니다.",
+          status: "error",
         });
       }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
       }
-      return res.status(500).json("서버 에러가 발생했습니다.");
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
     }
   }
 
@@ -304,19 +352,23 @@ export class PlacesController {
 
       if (worshipPlace) {
         return res.status(200).json({
-          worshipPlace: worshipPlace,
-          message: "Success!",
+          data: worshipPlace,
+          status: "success",
         });
       } else {
         return res.status(200).json({
           message: "No Data!",
+          status: "success",
         });
       }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
       }
-      return res.status(500).json("서버 에러가 발생했습니다.");
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
     }
   }
 
@@ -327,12 +379,14 @@ export class PlacesController {
       if (typeof id !== "string" || id === "") {
         return res.status(400).json({
           message: "유효하지 않은 아이디입니다.",
+          status: "failed",
         });
       }
 
       if (typeof afterIsDisplay !== "boolean") {
         return res.status(400).json({
           message: "유효하지 않은 값입니다.",
+          status: "failed",
         });
       }
 
@@ -340,20 +394,23 @@ export class PlacesController {
 
       if (result) {
         return res.status(200).json({
-          id,
-          afterIsDisplay,
-          message: "Success!",
+          data: { id, afterIsDisplay },
+          status: "success",
         });
       } else {
         return res.status(500).json({
           message: "디스플레이 지정에 실패했습니다.",
+          status: "error",
         });
       }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
       }
-      return res.status(500).json("서버 에러가 발생했습니다.");
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
     }
   }
 }
