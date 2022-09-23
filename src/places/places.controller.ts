@@ -6,22 +6,22 @@ export class PlacesController {
 
   getWorshipPlaceList(req: Request, res: Response) {
     try {
-      const worshipPlaceList = this.placesService.getWorshipPlaceList();
-
-      if (worshipPlaceList) {
-        return res.status(200).json({
-          data: {
-            count: worshipPlaceList.length,
-            worshipPlaces: worshipPlaceList,
-          },
-          status: "success",
-        });
-      } else {
-        return res.status(500).json({
-          message: "예배 목록 조회에 실패했습니다.",
-          status: "error",
-        });
-      }
+      this.placesService.getWorshipPlaceList().then((worshipPlaceList) => {
+        if (worshipPlaceList) {
+          return res.status(200).json({
+            data: {
+              count: worshipPlaceList.length,
+              worshipPlaces: worshipPlaceList,
+            },
+            status: "success",
+          });
+        } else {
+          return res.status(500).json({
+            message: "예배 목록 조회에 실패했습니다.",
+            status: "error",
+          });
+        }
+      });
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
@@ -44,19 +44,19 @@ export class PlacesController {
         });
       }
 
-      const worshipPlace = this.placesService.getWorshipPlace(id);
-
-      if (worshipPlace) {
-        return res.status(200).json({
-          data: worshipPlace,
-          status: "success",
-        });
-      } else {
-        return res.status(200).json({
-          message: "No Data!",
-          status: "success",
-        });
-      }
+      this.placesService.getWorshipPlace(id).then((worshipPlace) => {
+        if (worshipPlace) {
+          return res.status(200).json({
+            data: worshipPlace,
+            status: "success",
+          });
+        } else {
+          return res.status(200).json({
+            message: "No Data!",
+            status: "success",
+          });
+        }
+      });
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
@@ -138,32 +138,6 @@ export class PlacesController {
     }
   }
 
-  deleteAllWorshipPlace(req: Request, res: Response) {
-    try {
-      const result = this.placesService.deleteAllWorshipPlace();
-
-      if (result) {
-        return res.status(200).json({
-          message: "Success!",
-          status: "success",
-        });
-      } else {
-        return res.status(500).json({
-          message: "예배 자리 전체 삭제에 실패했습니다.",
-          status: "error",
-        });
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        return res.status(500).json(error);
-      }
-      return res.status(500).json({
-        message: "서버 에러가 발생했습니다.",
-        status: "error",
-      });
-    }
-  }
-
   deleteWorshipPlace(req: Request, res: Response) {
     try {
       const { id } = req.params;
@@ -175,19 +149,19 @@ export class PlacesController {
         });
       }
 
-      const result = this.placesService.deleteWorshipPlace(id);
-
-      if (result) {
-        return res.status(200).json({
-          data: { id },
-          status: "success",
-        });
-      } else {
-        return res.status(500).json({
-          message: "예배 자리 삭제에 실패했습니다.",
-          status: "error",
-        });
-      }
+      this.placesService.deleteWorshipPlace(id).then((result) => {
+        if (result) {
+          return res.status(200).json({
+            data: { id },
+            status: "success",
+          });
+        } else {
+          return res.status(500).json({
+            message: "예배 자리 삭제에 실패했습니다.",
+            status: "error",
+          });
+        }
+      });
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
@@ -210,20 +184,20 @@ export class PlacesController {
         });
       }
 
-      const result = this.placesService.checkId(id);
-
-      if (result) {
-        return res.status(200).json({
-          data: { result: result },
-          status: "success",
-        });
-      } else {
-        return res.status(200).json({
-          data: { result: result },
-          message: "해당 아이디가 존재하지 않습니다.",
-          status: "success",
-        });
-      }
+      this.placesService.checkId(id).then((result) => {
+        if (result) {
+          return res.status(200).json({
+            data: { result: result },
+            status: "success",
+          });
+        } else {
+          return res.status(200).json({
+            data: { result: result },
+            message: "해당 아이디가 존재하지 않습니다.",
+            status: "success",
+          });
+        }
+      });
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
@@ -273,19 +247,19 @@ export class PlacesController {
         });
       }
 
-      const newPlace = this.placesService.setPlace(id, row, col, name, cell);
-
-      if (newPlace) {
-        return res.status(200).json({
-          data: newPlace,
-          status: "success",
-        });
-      } else {
-        return res.status(500).json({
-          message: "자리 저장에 실패했습니다.",
-          status: "error",
-        });
-      }
+      this.placesService.setPlace(id, row, col, name, cell).then((newPlace) => {
+        if (newPlace) {
+          return res.status(200).json({
+            data: newPlace,
+            status: "success",
+          });
+        } else {
+          return res.status(500).json({
+            message: "자리 저장에 실패했습니다.",
+            status: "error",
+          });
+        }
+      });
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
@@ -322,19 +296,19 @@ export class PlacesController {
         });
       }
 
-      const newPlace = this.placesService.deletePlace(id, row, col);
-
-      if (newPlace) {
-        return res.status(200).json({
-          data: newPlace,
-          status: "success",
-        });
-      } else {
-        return res.status(500).json({
-          message: "자리 삭제에 실패했습니다.",
-          status: "error",
-        });
-      }
+      this.placesService.deletePlace(id, row, col).then((newPlace) => {
+        if (newPlace) {
+          return res.status(200).json({
+            data: newPlace,
+            status: "success",
+          });
+        } else {
+          return res.status(500).json({
+            message: "자리 삭제에 실패했습니다.",
+            status: "error",
+          });
+        }
+      });
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
@@ -348,19 +322,19 @@ export class PlacesController {
 
   getDisplay(req: Request, res: Response) {
     try {
-      const worshipPlace = this.placesService.getDisplay();
-
-      if (worshipPlace) {
-        return res.status(200).json({
-          data: worshipPlace,
-          status: "success",
-        });
-      } else {
-        return res.status(200).json({
-          message: "No Data!",
-          status: "success",
-        });
-      }
+      this.placesService.getDisplay().then((worshipPlace) => {
+        if (worshipPlace) {
+          return res.status(200).json({
+            data: worshipPlace,
+            status: "success",
+          });
+        } else {
+          return res.status(200).json({
+            message: "No Data!",
+            status: "success",
+          });
+        }
+      });
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);
@@ -390,19 +364,19 @@ export class PlacesController {
         });
       }
 
-      const result = this.placesService.setDisplay(id, afterIsDisplay);
-
-      if (result) {
-        return res.status(200).json({
-          data: { id, afterIsDisplay },
-          status: "success",
-        });
-      } else {
-        return res.status(500).json({
-          message: "디스플레이 지정에 실패했습니다.",
-          status: "error",
-        });
-      }
+      this.placesService.setDisplay(id, afterIsDisplay).then((result) => {
+        if (result) {
+          return res.status(200).json({
+            data: { id, afterIsDisplay },
+            status: "success",
+          });
+        } else {
+          return res.status(500).json({
+            message: "디스플레이 지정에 실패했습니다.",
+            status: "error",
+          });
+        }
+      });
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json(error);

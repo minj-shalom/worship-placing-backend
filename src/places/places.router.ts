@@ -15,9 +15,6 @@ placesRouter.get("/worship-place/:id", (req, res) =>
 placesRouter.post("/worship-place", (req, res) =>
   placesController.setWorshipPlace(req, res)
 );
-placesRouter.delete("/worship-place", (req, res) =>
-  placesController.deleteAllWorshipPlace(req, res)
-);
 placesRouter.delete("/worship-place/:id", (req, res) =>
   placesController.deleteWorshipPlace(req, res)
 );
