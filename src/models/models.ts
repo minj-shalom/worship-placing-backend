@@ -59,6 +59,16 @@ const DisplaySchema = new Schema(
 );
 
 /**
+ * InfoSchema
+ */
+const InfoSchema = new Schema(
+  {
+    version: String,
+  },
+  { collection: "Info" }
+);
+
+/**
  * WorshipPlaceSchema autoIncrement
  */
 const autoIncrement = require("mongoose-auto-increment");
@@ -105,3 +115,9 @@ export const WorshipPlaceModel = mongoose.model(
  * @param id
  */
 export const DisplayModel = mongoose.model("Display", DisplaySchema);
+
+/**
+ * InfoSchema
+ * @param version
+ */
+export const InfoModel = mongoose.model("Info", InfoSchema);

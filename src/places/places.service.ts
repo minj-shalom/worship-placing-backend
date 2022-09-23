@@ -1,9 +1,15 @@
 import { Place } from "../commons/place";
-import { DisplayModel, WorshipPlaceModel } from "../models/models";
+import { DisplayModel, InfoModel, WorshipPlaceModel } from "../models/models";
 
 const koreaTimezone = 1000 * 60 * 60 * 9;
 
 export class PlacesService {
+  async info() {
+    const info = await InfoModel.find({}, { _id: 0, __v: 0 });
+
+    return info[0];
+  }
+
   async getWorshipPlaceList() {
     const worshipPlaces = await WorshipPlaceModel.find(
       {},

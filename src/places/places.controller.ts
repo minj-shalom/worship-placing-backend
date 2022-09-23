@@ -4,6 +4,32 @@ import { PlacesService } from "./places.service";
 export class PlacesController {
   constructor(private placesService: PlacesService) {}
 
+  info(req: Request, res: Response) {
+    try {
+      this.placesService.info().then((info) => {
+        if (info) {
+          return res.status(200).json({
+            data: info,
+            status: "success",
+          });
+        } else {
+          return res.status(500).json({
+            message: "시스템 정보 조회에 실패했습니다.",
+            status: "error",
+          });
+        }
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json(error);
+      }
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
+    }
+  }
+
   getWorshipPlaceList(req: Request, res: Response) {
     try {
       this.placesService.getWorshipPlaceList().then((worshipPlaceList) => {

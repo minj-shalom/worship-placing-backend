@@ -6,6 +6,8 @@ const placesRouter = Router();
 
 const placesController = new PlacesController(new PlacesService());
 
+placesRouter.get("/info", (req, res) => placesController.info(req, res));
+
 placesRouter.get("/worship-place", (req, res) =>
   placesController.getWorshipPlaceList(req, res)
 );
