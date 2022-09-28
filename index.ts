@@ -2,16 +2,13 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import placesRouter from "./src/places/places.router";
+import { koreaTimezone } from "./src/commons/in-memory-map";
+
+console.log(new Date(Date.now() + koreaTimezone).toISOString());
 
 dotenv.config();
 if (!process.env.REACT_APP_BASE_PORT) {
   throw new Error("'REACT_APP_BASE_PORT' env not found!");
-}
-if (!process.env.REACT_APP_DB_ID) {
-  throw new Error("'REACT_APP_DB_ID' env not found!");
-}
-if (!process.env.REACT_APP_DB_PW) {
-  throw new Error("'REACT_APP_DB_PW' env not found!");
 }
 if (!process.env.REACT_APP_DB_ENDPOINT) {
   throw new Error("'REACT_APP_DB_ENDPOINT' env not found!");
@@ -32,13 +29,20 @@ db.once("open", function () {
   console.log("MongoDB connect");
 });
 
-mongoose.connect(
-  `mongodb://${dbID}:${dbPW}@${dbEndpoint}/local?authSource=admin&authMechanism=SCRAM-SHA-1`,
-  {
+if (dbID && dbPW) {
+  mongoose.connect(
+    `mongodb://${dbID}:${dbPW}@${dbEndpoint}/local?authSource=admin&authMechanism=SCRAM-SHA-1`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  );
+} else {
+  mongoose.connect(`mongodb://${dbEndpoint}/local`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  }
-);
+  });
+}
 
 app.use(cors());
 app.use(express.json());
