@@ -1,7 +1,6 @@
+import { koreaTimezone } from "../commons/in-memory-map";
 import { Place } from "../commons/place";
 import { DisplayModel, InfoModel, WorshipPlaceModel } from "../models/models";
-
-const koreaTimezone = 1000 * 60 * 60 * 9;
 
 export class PlacesService {
   async info() {
@@ -280,6 +279,62 @@ export class PlacesService {
           return true;
         }
       }
+    }
+  }
+
+  async validateDisplay() {
+    const now = new Date(Date.now() + koreaTimezone).toISOString();
+    const nowYear = Number(now.substring(0, 4));
+    const nowMonth = Number(now.substring(5, 7));
+    const nowDate = Number(now.substring(8, 10));
+    const displayIdList = await DisplayModel.find({}, { _id: 0, __v: 0 });
+    const displayId = displayIdList?.[0]?.id;
+
+    if (!displayId) {
+      return "D001";
+    } else {
+      const validatorCode = this.getWorshipPlace(displayId).then(
+        async (worshipPlace) => {
+          const date = worshipPlace.date;
+          const dbYear = date.substring(0, 4);
+          const dbMonth = date.substring(5, 7);
+          const dbDate = date.substring(8, 10);
+
+          if (dbYear < nowYear) {
+            await WorshipPlaceModel.updateOne(
+              { id: Number(displayId) },
+              { isDisplay: false }
+            );
+            await DisplayModel.deleteOne({ id: Number(displayId) });
+            return "D003";
+          } else if (dbYear > nowYear) {
+            return "D002";
+          } else {
+            if (dbMonth < nowMonth) {
+              await WorshipPlaceModel.updateOne(
+                { id: Number(displayId) },
+                { isDisplay: false }
+              );
+              await DisplayModel.deleteOne({ id: Number(displayId) });
+              return "D003";
+            } else if (dbMonth > nowMonth) {
+              return "D002";
+            } else {
+              if (dbDate > nowDate) {
+                return "D002";
+              } else {
+                await WorshipPlaceModel.updateOne(
+                  { id: Number(displayId) },
+                  { isDisplay: false }
+                );
+                await DisplayModel.deleteOne({ id: Number(displayId) });
+                return "D003";
+              }
+            }
+          }
+        }
+      );
+      return validatorCode;
     }
   }
 }

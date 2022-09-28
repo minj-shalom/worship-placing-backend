@@ -413,4 +413,30 @@ export class PlacesController {
       });
     }
   }
+
+  validateDisplay(req: Request, res: Response) {
+    try {
+      this.placesService.validateDisplay().then((result) => {
+        if (result) {
+          return res.status(200).json({
+            data: { validatorCode: result },
+            status: "success",
+          });
+        } else {
+          return res.status(500).json({
+            message: "크론잡 수행(validateDisplay)에 실패했습니다.",
+            status: "error",
+          });
+        }
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).json(error);
+      }
+      return res.status(500).json({
+        message: "서버 에러가 발생했습니다.",
+        status: "error",
+      });
+    }
+  }
 }

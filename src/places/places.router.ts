@@ -39,4 +39,8 @@ placesRouter.put("/display", (req, res) =>
   placesController.setDisplay(req, res)
 );
 
+placesRouter.patch("/cron-job/validate-display", (req, res) =>
+  placesController.validateDisplay(req, res)
+);
+
 export default placesRouter;
