@@ -7,18 +7,25 @@ import { koreaTimezone } from "./src/commons/in-memory-map";
 console.log(new Date(Date.now() + koreaTimezone).toISOString());
 
 dotenv.config();
-if (!process.env.REACT_APP_BASE_PORT) {
-  throw new Error("'REACT_APP_BASE_PORT' env not found!");
+
+function required(key: string) {
+  const value = process.env[key];
+  if (value == null) {
+    throw new Error(`'${key}' env not found!`);
+  }
+  return value;
 }
-if (!process.env.REACT_APP_DB_ENDPOINT) {
-  throw new Error("'REACT_APP_DB_ENDPOINT' env not found!");
+
+function optional(key: string) {
+  const value = process.env[key];
+  return value;
 }
 
 const app = express();
-const port = process.env.REACT_APP_BASE_PORT;
-const dbID = process.env.REACT_APP_DB_ID;
-const dbPW = process.env.REACT_APP_DB_PW;
-const dbEndpoint = process.env.REACT_APP_DB_ENDPOINT;
+const port = required("BASE_PORT");
+const dbID = optional("DB_ID");
+const dbPW = optional("DB_PW");
+const dbEndpoint = required("DB_ENDPOINT");
 
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
